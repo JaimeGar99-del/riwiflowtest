@@ -1,7 +1,7 @@
 import { TaskCard } from "./taskCard.js";
 
 const COLUMNS = [
-  { id: "todo",        label: "To Do" },
+  { id: "todo", label: "To Do" },
   { id: "in progress", label: "In Progress" },
   { id: "in review",   label: "In Review" },
   { id: "done",        label: "Done" },
@@ -23,6 +23,7 @@ export function KanbanBoard(tasks, users, onDelete) {
           <h3 class="font-title-sm text-title-sm text-on-surface">${label}</h3>
           <span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-sm text-label-sm">${filtered.length}</span>
         </div>
+        <button class="material-symbols-outlined text-outline">more_horiz</button>
       </div>
       <div class="col-list flex-1 space-y-md p-2 bg-surface-container-low/50 rounded-xl overflow-y-auto custom-scrollbar"></div>
     `;

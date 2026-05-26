@@ -9,36 +9,45 @@ export function renderSidebar() {
   aside.innerHTML = `
     <div class="px-gutter mb-xl">
       <h1 class="font-headline-md text-headline-md font-bold text-primary">Riwiflow</h1>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">${user.role === "admin" ? "Admin Workspace" : "Coder Workspace"}</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Product Team</p>
     </div>
 
-    <nav class="flex flex-col gap-xs px-sm flex-1">
-      <button id="navDashboard"
-        class="flex items-center gap-md px-md py-sm rounded-full bg-secondary-container text-on-surface font-label-md text-label-md w-full text-left">
-        <span class="material-symbols-outlined text-primary">dashboard</span>
-        Dashboard
-      </button>
-      ${user.role === "admin" ? `
-      <button id="navCreate"
-        class="flex items-center gap-md px-md py-sm rounded-full hover:bg-surface-container text-on-surface font-label-md text-label-md w-full text-left transition-colors">
-        <span class="material-symbols-outlined text-on-surface-variant">add_circle</span>
-        New Task
-      </button>` : ""}
+    <nav class="flex-1 space-y-1">
+      <a id="navDashboard"
+        class="flex items-center bg-primary-fixed text-on-primary-fixed-variant rounded-lg mx-2 px-4 py-3 font-body-sm text-body-sm transition-all scale-[0.98] cursor-pointer">
+        <span class="material-symbols-outlined mr-3">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="flex items-center text-secondary hover:text-primary hover:bg-primary-container/10 px-4 py-3 mx-2 font-body-sm text-body-sm rounded-lg transition-all cursor-pointer">
+        <span class="material-symbols-outlined mr-3">assignment</span>
+        <span>Projects</span>
+      </a>
+      <a class="flex items-center text-secondary hover:text-primary hover:bg-primary-container/10 px-4 py-3 mx-2 font-body-sm text-body-sm rounded-lg transition-all cursor-pointer">
+        <span class="material-symbols-outlined mr-3">group</span>
+        <span>Team</span>
+      </a>
+      <a class="flex items-center text-secondary hover:text-primary hover:bg-primary-container/10 px-4 py-3 mx-2 font-body-sm text-body-sm rounded-lg transition-all cursor-pointer">
+        <span class="material-symbols-outlined mr-3">bar_chart</span>
+        <span>Reports</span>
+      </a>
+      <a class="flex items-center text-secondary hover:text-primary hover:bg-primary-container/10 px-4 py-3 mx-2 font-body-sm text-body-sm rounded-lg transition-all cursor-pointer">
+        <span class="material-symbols-outlined mr-3">settings</span>
+        <span>Settings</span>
+      </a>
     </nav>
 
-    <div class="mt-auto px-sm">
-      <div class="flex items-center gap-md px-md py-sm rounded-xl border border-outline-variant">
-        <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center">
-          <span class="material-symbols-outlined text-on-primary-fixed-variant text-[18px]">person</span>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="font-label-md text-label-md text-on-surface truncate">${user.name}</p>
-          <p class="font-body-sm text-body-sm text-on-surface-variant capitalize">${user.role}</p>
-        </div>
-        <button id="logoutBtn" class="material-symbols-outlined text-outline hover:text-error transition-colors" title="Logout">
-          logout
-        </button>
-      </div>
+    <div class="px-4 mt-auto">
+      ${user.role === "admin" ? `
+      <button id="navCreate"
+        class="w-full bg-primary text-on-primary py-3 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity mb-2">
+        <span class="material-symbols-outlined">add</span>
+        New Task
+      </button>` : ""}
+      <button id="logoutBtn"
+        class="w-full flex items-center justify-center gap-2 py-3 border border-outline-variant rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        Logout
+      </button>
     </div>
   `;
 

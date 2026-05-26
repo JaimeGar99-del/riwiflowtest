@@ -20,13 +20,13 @@
       "id": "1",
       "title": "Build Login",
       "description": "Create login page",
-      "status": "in review",
+      "status": "todo",
       "userId": 2
     },
     {
       "title": "harry",
       "description": "efwdfged",
-      "status": "in progress",
+      "status": "todo",
       "userId": 1,
       "id": "AolMvTfbmlA"
     }
