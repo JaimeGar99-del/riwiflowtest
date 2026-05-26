@@ -55,7 +55,7 @@ riwiflow/
 ## Clone the repository
 
 ```bash
-git clone <REPOSITORY_URL>
+git clone <https://github.com/JaimeGar99-del/riwiflowtest.git>
 ```
 
 ---
