@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@mail.com",
+      "password": "123456",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Coder User",
+      "email": "coder@mail.com",
+      "password": "123456",
+      "role": "coder"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Build Login",
+      "description": "Create login page",
+      "status": "in review",
+      "userId": 2
+    },
+    {
+      "title": "harry",
+      "description": "efwdfged",
+      "status": "in progress",
+      "userId": 1,
+      "id": "AolMvTfbmlA"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
