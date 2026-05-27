@@ -1,5 +1,6 @@
 import { TaskCard } from "./taskCard.js";
 import { updateTask } from "../services/taskService.js";
+import { authStore } from "../store/authStore.js";
 
 const COLUMNS = [
   { id: "todo",        label: "To Do" },
@@ -12,6 +13,7 @@ export function KanbanBoard(tasks, users, onDelete) {
   const board = document.createElement("div");
   board.className = "flex gap-gutter h-full overflow-x-auto pb-md";
 
+  const currentUser = authStore.getUser();
   let draggedTaskId = null;
 
   COLUMNS.forEach(({ id, label }) => {
@@ -51,6 +53,9 @@ export function KanbanBoard(tasks, users, onDelete) {
       if (!draggedTaskId) return;
       const task = tasks.find((t) => String(t.id) === String(draggedTaskId));
       if (!task || task.status === id) return;
+
+      // Coders can only move their own tasks
+      if (currentUser.role === "coder" && String(task.userId) !== String(currentUser.id)) return;
 
       await updateTask(draggedTaskId, { status: id });
       onDelete?.(); // reload board

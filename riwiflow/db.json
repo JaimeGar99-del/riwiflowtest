@@ -20,27 +20,27 @@
       "id": "1",
       "title": "Build Login",
       "description": "Create login page",
-      "status": "todo",
+      "status": "in progress",
       "userId": 2
     },
     {
       "title": "harry",
       "description": "efwdfged",
-      "status": "done",
+      "status": "in review",
       "userId": 1,
       "id": "AolMvTfbmlA"
     },
     {
       "title": "prueba",
       "description": "123",
-      "status": "in review",
+      "status": "todo",
       "userId": 2,
       "id": "8y6ig1lC5W0"
     },
     {
       "title": "test",
       "description": "testeo",
-      "status": "in progress",
+      "status": "done",
       "userId": 2,
       "id": "BpN1sOjG-Ck"
     }

@@ -21,9 +21,11 @@ export function TaskCard(task, users = [], onDelete, onDragStart) {
   const canEdit = user.role === "admin" || (user.role === "coder" && String(task.userId) === String(user.id));
   const isDone = task.status === "done";
 
+  const canDrag = user.role === "admin" || (user.role === "coder" && String(task.userId) === String(user.id));
+
   const card = document.createElement("div");
-  card.className = `task-card bg-surface${isDone ? "/60 opacity-80" : ""} border border-outline-variant rounded-xl p-md shadow-sm cursor-grab active:cursor-grabbing`;
-  card.setAttribute("draggable", "true");
+  card.className = `task-card bg-surface${isDone ? "/60 opacity-80" : ""} border border-outline-variant rounded-xl p-md shadow-sm ${canDrag ? "cursor-grab active:cursor-grabbing" : "cursor-default"}`;
+  card.setAttribute("draggable", canDrag ? "true" : "false");
 
   const statusBadge = STATUS_COLORS[task.status] ?? "bg-surface-container-high text-on-surface-variant";
 
@@ -55,8 +57,9 @@ export function TaskCard(task, users = [], onDelete, onDragStart) {
     </div>
   `;
 
-  // Drag start — pass task id up
+  // Drag start — solo si tiene permiso
   card.addEventListener("dragstart", (e) => {
+    if (!canDrag) { e.preventDefault(); return; }
     e.dataTransfer.effectAllowed = "move";
     onDragStart?.(task.id);
   });
