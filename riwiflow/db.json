@@ -26,9 +26,23 @@
     {
       "title": "harry",
       "description": "efwdfged",
-      "status": "todo",
+      "status": "done",
       "userId": 1,
       "id": "AolMvTfbmlA"
+    },
+    {
+      "title": "prueba",
+      "description": "123",
+      "status": "in review",
+      "userId": 2,
+      "id": "8y6ig1lC5W0"
+    },
+    {
+      "title": "test",
+      "description": "testeo",
+      "status": "in progress",
+      "userId": 2,
+      "id": "BpN1sOjG-Ck"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

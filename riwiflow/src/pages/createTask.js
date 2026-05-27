@@ -10,58 +10,61 @@ export async function createTaskPage() {
 
   const users = await getUsers();
 
-  app.innerHTML = `<div class="bg-background text-on-background overflow-hidden h-screen flex" id="layout"></div>`;
+  app.innerHTML = `<div class="bg-background text-on-background overflow-hidden h-screen flex relative" id="layout"></div>`;
   const layout = document.getElementById("layout");
+
+  // Blob background — rendered behind content with z-0, content on z-10
+  const blobs = document.createElement("div");
+  blobs.className = "pointer-events-none absolute inset-0 overflow-hidden z-0";
+  blobs.innerHTML = `
+    <div style="position:absolute;top:-12%;right:-8%;width:42%;height:42%;background:rgba(235,221,255,0.35);filter:blur(100px);border-radius:50%"></div>
+    <div style="position:absolute;bottom:-12%;left:-8%;width:32%;height:32%;background:rgba(227,225,237,0.25);filter:blur(90px);border-radius:50%"></div>
+    <div style="position:absolute;top:40%;left:30%;width:25%;height:25%;background:rgba(83,0,183,0.06);filter:blur(80px);border-radius:50%"></div>
+  `;
+  layout.appendChild(blobs);
+
   layout.appendChild(renderSidebar());
 
   const main = document.createElement("main");
-  main.className = "flex-1 flex flex-col min-w-0";
+  main.className = "flex-1 flex flex-col overflow-auto relative z-10";
   main.innerHTML = `
-    <header class="flex justify-between items-center h-16 px-gutter w-full bg-surface border-b border-outline-variant z-40">
-      <div class="flex items-center gap-4 flex-1">
-        <div class="relative max-w-md w-full">
-          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-          <input
-            class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-full font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20"
-            placeholder="Search tasks or files..."
-            type="text"
-          />
-        </div>
-      </div>
-      <div class="flex items-center gap-4 ml-4">
-        <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
-          notifications
-        </button>
-        <button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
-          help_outline
-        </button>
-        <div class="flex items-center gap-2">
-          <img
-            alt="User profile"
-            class="w-8 h-8 rounded-full border border-outline-variant object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2-sF_Qd9jEF33fUrS3vMvdoA8rbw2_a6jzv7r_6oDikCkrertidHwLgqAtWuKvLnRx7Lcsi79ZYj4FBaL_pETFxeyeF27_PhXy-KnuioiYgCwYTKcWDEuZoRksSf8Jb0_ZmsxJkpTFGZ2bW8aTl5fhcA4DOHQQal_vu1KVBcizoM56dHRc7Ce_vkUul2aL96DSeDmqR4YdfGUuoIQkUF_F8AX45U05tmCFg7YyPH6xtgAx7e31u5_5e2rQxm_tgBEgnhV-LsqsEDH"
-          />
-          <span class="font-label-md text-label-md text-on-surface">${user.name}</span>
-        </div>
-      </div>
-    </header>
-    <div class="flex-1 flex flex-col overflow-auto">
-      <div class="px-gutter py-lg border-b border-outline-variant bg-surface shrink-0">
+    <header class="flex items-center justify-between px-xl py-md border-b border-outline-variant bg-surface/80 backdrop-blur-sm shrink-0">
+      <div>
         <h2 class="font-headline-md text-headline-md text-on-surface">Create New Task</h2>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Add a new task to the project board</p>
       </div>
-      <div class="flex-1 flex items-start justify-center px-xl py-xl">
-        <div class="w-full max-w-[520px] bg-surface-container-lowest border border-outline-variant rounded-xl p-xl space-y-lg">
+      <button id="cancelBtnHeader"
+        class="flex items-center gap-xs text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </header>
+
+    <div class="flex-1 flex items-start justify-center px-xl py-xl">
+      <div class="w-full max-w-[520px]">
+
+        <!-- Card -->
+        <div class="bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant rounded-xl p-xl space-y-lg shadow-sm">
+
+          <div class="space-y-xs">
+            <h3 class="font-title-sm text-title-sm text-on-surface">Task details</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">Fill in the information below to create the task.</p>
+          </div>
+
+          <div class="border-t border-outline-variant"></div>
+
           <form id="createForm" class="space-y-lg">
             <div class="space-y-sm">
               <label class="font-label-md text-label-md text-on-surface">Title</label>
               <input id="title" type="text" placeholder="Task title" required
                 class="w-full px-md py-md bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface input-focus-ring transition-all placeholder:text-outline" />
             </div>
+
             <div class="space-y-sm">
               <label class="font-label-md text-label-md text-on-surface">Description</label>
               <textarea id="description" placeholder="Describe the task..." required rows="4"
                 class="w-full px-md py-md bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface input-focus-ring transition-all placeholder:text-outline resize-none"></textarea>
             </div>
+
             <div class="space-y-sm">
               <label class="font-label-md text-label-md text-on-surface">Assign to</label>
               <select id="userId"
@@ -69,13 +72,17 @@ export async function createTaskPage() {
                 ${users.map(u => `<option value="${u.id}">${u.name} (${u.role})</option>`).join("")}
               </select>
             </div>
-            <div class="flex gap-md justify-end pt-sm">
+
+            <div class="border-t border-outline-variant"></div>
+
+            <div class="flex gap-md justify-end">
               <button type="button" id="cancelBtn"
                 class="px-lg py-sm border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors">
                 Cancel
               </button>
               <button type="submit"
-                class="px-lg py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-[0.98]">
+                class="px-lg py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-[0.98] flex items-center gap-sm">
+                <span class="material-symbols-outlined text-[18px]">add_task</span>
                 Create Task
               </button>
             </div>
@@ -88,8 +95,12 @@ export async function createTaskPage() {
   layout.appendChild(main);
 
   document.getElementById("cancelBtn").addEventListener("click", () => navigateTo("/dashboard"));
+  document.getElementById("cancelBtnHeader")?.addEventListener("click", () => navigateTo("/dashboard"));
   document.getElementById("createForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+    const btn = e.target.querySelector("[type=submit]");
+    btn.disabled = true;
+    btn.textContent = "Creating...";
     await createTask({
       title: document.getElementById("title").value.trim(),
       description: document.getElementById("description").value.trim(),
