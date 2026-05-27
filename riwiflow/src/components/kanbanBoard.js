@@ -3,10 +3,10 @@ import { updateTask } from "../services/taskService.js";
 import { authStore } from "../store/authStore.js";
 
 const COLUMNS = [
-  { id: "todo",        label: "To Do" },
-  { id: "in progress", label: "In Progress" },
-  { id: "in review",   label: "In Review" },
-  { id: "done",        label: "Done" },
+  { id: "todo",        label: "To Do",       counterClass: "bg-surface-container-high text-on-surface-variant" },
+  { id: "in progress", label: "In Progress", counterClass: "bg-primary-container text-on-primary" },
+  { id: "in review",   label: "In Review",   counterClass: "bg-surface-container-high text-on-surface-variant" },
+  { id: "done",        label: "Done",        counterClass: "bg-surface-container-high text-on-surface-variant" },
 ];
 
 export function KanbanBoard(tasks, users, onDelete) {
@@ -16,7 +16,7 @@ export function KanbanBoard(tasks, users, onDelete) {
   const currentUser = authStore.getUser();
   let draggedTaskId = null;
 
-  COLUMNS.forEach(({ id, label }) => {
+  COLUMNS.forEach(({ id, label, counterClass }) => {
     const filtered = tasks.filter((t) => t.status === id);
 
     const col = document.createElement("div");
@@ -27,15 +27,15 @@ export function KanbanBoard(tasks, users, onDelete) {
       <div class="flex items-center justify-between mb-md">
         <div class="flex items-center gap-2">
           <h3 class="font-title-sm text-title-sm text-on-surface">${label}</h3>
-          <span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full font-label-sm text-label-sm col-count">${filtered.length}</span>
+          <span class="${counterClass} px-2 py-0.5 rounded-full font-label-sm text-label-sm col-count">${filtered.length}</span>
         </div>
+        <button class="material-symbols-outlined text-outline">more_horiz</button>
       </div>
       <div class="col-list flex-1 space-y-md p-2 bg-surface-container-low/50 rounded-xl overflow-y-auto custom-scrollbar transition-colors duration-200"></div>
     `;
 
     const list = col.querySelector(".col-list");
 
-    // Drag over — highlight drop zone
     list.addEventListener("dragover", (e) => {
       e.preventDefault();
       list.classList.add("bg-primary-fixed/30", "ring-2", "ring-primary");
@@ -45,7 +45,6 @@ export function KanbanBoard(tasks, users, onDelete) {
       list.classList.remove("bg-primary-fixed/30", "ring-2", "ring-primary");
     });
 
-    // Drop — update task status
     list.addEventListener("drop", async (e) => {
       e.preventDefault();
       list.classList.remove("bg-primary-fixed/30", "ring-2", "ring-primary");
@@ -54,11 +53,11 @@ export function KanbanBoard(tasks, users, onDelete) {
       const task = tasks.find((t) => String(t.id) === String(draggedTaskId));
       if (!task || task.status === id) return;
 
-      // Coders can only move their own tasks
+      // Coders solo pueden mover sus propias tareas
       if (currentUser.role === "coder" && String(task.userId) !== String(currentUser.id)) return;
 
       await updateTask(draggedTaskId, { status: id });
-      onDelete?.(); // reload board
+      onDelete?.();
     });
 
     filtered.forEach((task) => {
